@@ -94,6 +94,7 @@
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
     <div>
+<h5>Scenario:</h5>
 <p>Consider this pseudo code:</p>
 <pre class="code literal-block"><span></span>async def worker(worker_idx, iterations):
     result, o = 0, iterations * worker_idx
@@ -104,6 +105,126 @@
 
 await wait([worker(i, 600) for i in range(10)])
 </pre>
+
+
+<h5>The Go code:</h5>
+<pre class="code literal-block"><span></span><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">"time"</span>
+    <span class="s2">"log"</span>
+    <span class="s2">"math/big"</span>
+<span class="p">)</span>
+
+<span class="n">var</span> <span class="p">(</span>
+    <span class="n">workersCount</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">iterations</span> <span class="o">=</span> <span class="mi">600</span>
+    <span class="n">workers</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="n">chan</span> <span class="nb">int</span><span class="p">,</span> <span class="n">workersCount</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">power</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="nb">int</span><span class="p">)</span> <span class="o">*</span><span class="n">big</span><span class="o">.</span><span class="n">Int</span><span class="p">{</span>
+    <span class="k">return</span> <span class="n">new</span><span class="p">(</span><span class="n">big</span><span class="o">.</span><span class="n">Int</span><span class="p">)</span><span class="o">.</span><span class="n">Exp</span><span class="p">(</span><span class="n">big</span><span class="o">.</span><span class="n">NewInt</span><span class="p">(</span><span class="n">int64</span><span class="p">(</span><span class="n">a</span><span class="p">)),</span> <span class="n">big</span><span class="o">.</span><span class="n">NewInt</span><span class="p">(</span><span class="n">int64</span><span class="p">(</span><span class="n">b</span><span class="p">)),</span> <span class="n">nil</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">worker</span><span class="p">(</span><span class="n">idx</span> <span class="nb">int</span><span class="p">,</span> <span class="n">iterations</span> <span class="nb">int</span><span class="p">){</span>
+    <span class="n">result</span><span class="p">,</span> <span class="n">o</span> <span class="p">:</span><span class="o">=</span> <span class="n">new</span><span class="p">(</span><span class="n">big</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span> <span class="n">idx</span> <span class="o">*</span> <span class="n">iterations</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="p">:</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">o</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">power</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="p">:</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">o</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">Sub</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">power</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+    <span class="p">}</span>
+    <span class="n">workers</span> <span class="o">&lt;-</span> <span class="n">idx</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">start</span> <span class="p">:</span><span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="p">:</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">workersCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">go</span> <span class="n">worker</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">iterations</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="p">:</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">workersCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="o">&lt;-</span> <span class="n">workers</span>
+    <span class="p">}</span>
+
+    <span class="n">elapsed</span> <span class="p">:</span><span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">Since</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">"Time elapsed: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">)</span>
+<span class="p">}</span>
+</pre>
+
+
+<h5>Python code:</h5>
+<ul>
+<li>
+<p>cyaio_demo.pyx</p>
+<p>cdef void c_worker(int worker_idx, int iterations):
+    cdef int i, result, o = iterations * worker_idx
+    for i in range(o):
+        result += i<strong>i
+    for i in range(o):
+        result -= i</strong>i</p>
+<p>async def worker(int worker_idx, int iterations):
+    c_worker(worker_idx, iterations)</p>
+</li>
+<li>
+<p>pyaio_demo.py</p>
+<p>async def worker(worker_idx, iterations):
+    result, o = 0, iterations * worker_idx
+    for i in range(o):
+        result += i<strong>i
+    for i in range(o):
+        result -= i</strong>i</p>
+</li>
+<li>
+<p>run.py</p>
+<p>import cyaio_demo
+import pyaio_demo
+import sys
+import asyncio
+from datetime import datetime</p>
+<p>WORKERS = 10
+ITERATIONS = 600</p>
+<p>async def runner(f):
+    start_time = datetime.now()
+    await asyncio.wait([f(i, ITERATIONS) for i in range(WORKERS)])
+    return (datetime.now() - start_time).total_seconds()</p>
+<p>async def benchmark():
+    cython = await runner(cyaio_demo.worker)
+    print('Cython: %.5Fs' % cython)
+    python = await runner(pyaio_demo.worker)
+    print('CPython: %.5Fs' % python)
+    print('Cython is %dX faster than CPython' % round(python / cython))</p>
+<p>def main():
+    loop = asyncio.get_event_loop()
+    ret = loop.run_until_complete(benchmark())
+    loop.close()
+    return ret</p>
+<p>if <strong>name</strong> == '<strong>main</strong>':
+    sys.exit(main())</p>
+</li>
+<li>
+<p>setup.py</p>
+<p>from distutils.core import setup
+from Cython.Build import cythonize</p>
+<p><strong>author</strong> = 'vahid'</p>
+<p>setup(
+    name='cyaio',
+    ext_modules=cythonize("cyaio_demo.pyx"),
+)</p>
+</li>
+</ul>
+<h4>The Result</h4>
+<pre class="code literal-block"><span></span><span class="n">Cython</span><span class="o">:</span>   <span class="mf">0.01392</span><span class="n">s</span>
+<span class="n">GoLang</span><span class="o">:</span>   <span class="mf">5.33766</span><span class="n">s</span>
+<span class="n">CPython</span><span class="o">:</span> <span class="mf">13.39106</span><span class="n">s</span>
+<span class="n">Cython</span> <span class="k">is</span> <span class="mi">962</span><span class="n">X</span> <span class="n">faster</span> <span class="n">than</span> <span class="n">CPython</span>
+<span class="n">Golang</span> <span class="k">is</span> <span class="mf">2.5</span><span class="n">X</span> <span class="n">faster</span> <span class="n">than</span> <span class="n">CPython</span>
+<span class="n">Cython</span> <span class="k">is</span> <span class="mi">383</span><span class="n">X</span> <span class="n">faster</span> <span class="n">than</span> <span class="n">GoLang</span><span class="o">!</span>
+</pre>
+
+
+<p>So, Cython is my default optimization method an of-source, python is the best language ever.</p>
 </div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
