@@ -9,6 +9,10 @@
 .. type: text
 -->
 
+
+#### Scenario:
+
+
 Consider this pseudo code:
 
 
@@ -22,4 +26,144 @@ Consider this pseudo code:
     await wait([worker(i, 600) for i in range(10)])
 
 
+#### The Go code:
+
+
+
+    package main
+
+    import (
+        "time"
+        "log"
+        "math/big"
+    )
+
+    var (
+        workersCount = 10
+        iterations = 600
+        workers = make(chan int, workersCount)
+    )
+
+    func power(a, b int) *big.Int{
+        return new(big.Int).Exp(big.NewInt(int64(a)), big.NewInt(int64(b)), nil)
+    }
+
+    func worker(idx int, iterations int){
+        result, o := new(big.Int), idx * iterations
+        for i := 0; i < o; i++ {
+            result.Add(result, power(i, i))
+        }
+        for i := 0; i < o; i++ {
+            result.Sub(result, power(i, i))
+        }
+        workers <- idx
+    }
+
+    func main(){
+        start := time.Now()
+
+        for i := 0; i < workersCount; i++ {
+            go worker(i, iterations)
+        }
+
+        for i := 0; i < workersCount; i++ {
+            <- workers
+        }
+
+        elapsed := time.Since(start)
+        log.Printf("Time elapsed: %s", elapsed)
+    }
+
+
+#### Python code:
+
+- cyaio_demo.pyx
+
+
+        cdef void c_worker(int worker_idx, int iterations):
+            cdef int i, result, o = iterations * worker_idx
+            for i in range(o):
+                result += i**i
+            for i in range(o):
+                result -= i**i
+
+
+        async def worker(int worker_idx, int iterations):
+            c_worker(worker_idx, iterations)
+
+
+- pyaio_demo.py
+
+
+        async def worker(worker_idx, iterations):
+            result, o = 0, iterations * worker_idx
+            for i in range(o):
+                result += i**i
+            for i in range(o):
+                result -= i**i
+
+- run.py
+
+
+        import cyaio_demo
+        import pyaio_demo
+        import sys
+        import asyncio
+        from datetime import datetime
+
+        WORKERS = 10
+        ITERATIONS = 600
+
+
+        async def runner(f):
+            start_time = datetime.now()
+            await asyncio.wait([f(i, ITERATIONS) for i in range(WORKERS)])
+            return (datetime.now() - start_time).total_seconds()
+
+
+        async def benchmark():
+            cython = await runner(cyaio_demo.worker)
+            print('Cython: %.5Fs' % cython)
+            python = await runner(pyaio_demo.worker)
+            print('CPython: %.5Fs' % python)
+            print('Cython is %dX faster than CPython' % round(python / cython))
+
+
+        def main():
+            loop = asyncio.get_event_loop()
+            ret = loop.run_until_complete(benchmark())
+            loop.close()
+            return ret
+
+
+        if __name__ == '__main__':
+            sys.exit(main())
+
+
+- setup.py
+
+    
+        from distutils.core import setup
+        from Cython.Build import cythonize
+
+        __author__ = 'vahid'
+
+
+        setup(
+            name='cyaio',
+            ext_modules=cythonize("cyaio_demo.pyx"),
+        )
+
+
+### The Result
+
+
+    Cython:   0.01392s
+    GoLang:   5.33766s
+    CPython: 13.39106s
+    Cython is 962X faster than CPython
+    Golang is 2.5X faster than CPython
+    Cython is 383X faster than GoLang!
+
+So, Cython is my default optimization method an of-source, python is the best language ever.
 

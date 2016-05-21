@@ -9,7 +9,10 @@
 .. type: text
 -->
 
-#### Scenario:
+
+Scenario:
+---------
+
 
 Consider this pseudo code:
 
@@ -24,7 +27,8 @@ Consider this pseudo code:
     await wait([worker(i, 600) for i in range(10)])
 
 
-#### The Go code:
+The Go code:
+------------
 
 
     package main
@@ -72,87 +76,89 @@ Consider this pseudo code:
     }
 
 
-#### Python code:
+Python code:
+------------
 
 - cyaio_demo.pyx
 
 
-    cdef void c_worker(int worker_idx, int iterations):
-        cdef int i, result, o = iterations * worker_idx
-        for i in range(o):
-            result += i**i
-        for i in range(o):
-            result -= i**i
+        cdef void c_worker(int worker_idx, int iterations):
+            cdef int i, result, o = iterations * worker_idx
+            for i in range(o):
+                result += i**i
+            for i in range(o):
+                result -= i**i
 
 
-    async def worker(int worker_idx, int iterations):
-        c_worker(worker_idx, iterations)
+        async def worker(int worker_idx, int iterations):
+            c_worker(worker_idx, iterations)
 
 
 - pyaio_demo.py
 
 
-    async def worker(worker_idx, iterations):
-        result, o = 0, iterations * worker_idx
-        for i in range(o):
-            result += i**i
-        for i in range(o):
-            result -= i**i
+        async def worker(worker_idx, iterations):
+            result, o = 0, iterations * worker_idx
+            for i in range(o):
+                result += i**i
+            for i in range(o):
+                result -= i**i
 
 - run.py
 
 
-    import cyaio_demo
-    import pyaio_demo
-    import sys
-    import asyncio
-    from datetime import datetime
+        import cyaio_demo
+        import pyaio_demo
+        import sys
+        import asyncio
+        from datetime import datetime
 
-    WORKERS = 10
-    ITERATIONS = 600
-
-
-    async def runner(f):
-        start_time = datetime.now()
-        await asyncio.wait([f(i, ITERATIONS) for i in range(WORKERS)])
-        return (datetime.now() - start_time).total_seconds()
+        WORKERS = 10
+        ITERATIONS = 600
 
 
-    async def benchmark():
-        cython = await runner(cyaio_demo.worker)
-        print('Cython: %.5Fs' % cython)
-        python = await runner(pyaio_demo.worker)
-        print('CPython: %.5Fs' % python)
-        print('Cython is %dX faster than CPython' % round(python / cython))
+        async def runner(f):
+            start_time = datetime.now()
+            await asyncio.wait([f(i, ITERATIONS) for i in range(WORKERS)])
+            return (datetime.now() - start_time).total_seconds()
 
 
-    def main():
-        loop = asyncio.get_event_loop()
-        ret = loop.run_until_complete(benchmark())
-        loop.close()
-        return ret
+        async def benchmark():
+            cython = await runner(cyaio_demo.worker)
+            print('Cython: %.5Fs' % cython)
+            python = await runner(pyaio_demo.worker)
+            print('CPython: %.5Fs' % python)
+            print('Cython is %dX faster than CPython' % round(python / cython))
 
 
-    if __name__ == '__main__':
-        sys.exit(main())
+        def main():
+            loop = asyncio.get_event_loop()
+            ret = loop.run_until_complete(benchmark())
+            loop.close()
+            return ret
+
+
+        if __name__ == '__main__':
+            sys.exit(main())
 
 
 - setup.py
 
     
-    from distutils.core import setup
-    from Cython.Build import cythonize
+        from distutils.core import setup
+        from Cython.Build import cythonize
 
-    __author__ = 'vahid'
-
-
-    setup(
-        name='cyaio',
-        ext_modules=cythonize("cyaio_demo.pyx"),
-    )
+        __author__ = 'vahid'
 
 
-### The Result
+        setup(
+            name='cyaio',
+            ext_modules=cythonize("cyaio_demo.pyx"),
+        )
+
+
+The Result
+----------
 
 
     Cython:   0.01392s
