@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Monty Python &amp; Famous Historian (programming)</title><link>http://pylover.dobisel.com/</link><description></description><atom:link href="http://pylover.dobisel.com/categories/cat_programming.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Sat, 21 May 2016 21:35:16 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Go &amp; Python performance test</title><link>http://pylover.dobisel.com/posts/go-python-performance-test/</link><dc:creator>Vahid Mardani</dc:creator><description>&lt;div&gt;&lt;h5&gt;Scenario:&lt;/h5&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>Monty Python &amp; Famous Historian (programming)</title><link>http://pylover.dobisel.com/</link><description></description><atom:link rel="self" href="http://pylover.dobisel.com/categories/cat_programming.xml" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Sat, 21 May 2016 21:37:45 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Go &amp; Python performance test</title><link>http://pylover.dobisel.com/posts/go-python-performance-test/</link><dc:creator>Vahid Mardani</dc:creator><description>&lt;div&gt;&lt;h3&gt;Scenario:&lt;/h3&gt;
 &lt;p&gt;Consider this pseudo code:&lt;/p&gt;
 &lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;async def worker(worker_idx, iterations):
     result, o = 0, iterations * worker_idx
@@ -12,7 +12,7 @@ await wait([worker(i, 600) for i in range(10)])
 &lt;/pre&gt;
 
 
-&lt;h5&gt;The Go code:&lt;/h5&gt;
+&lt;h3&gt;The Go code:&lt;/h3&gt;
 &lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;package&lt;/span&gt; &lt;span class="n"&gt;main&lt;/span&gt;
 
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
@@ -59,67 +59,87 @@ await wait([worker(i, 600) for i in range(10)])
 &lt;/pre&gt;
 
 
-&lt;h5&gt;Python code:&lt;/h5&gt;
+&lt;h3&gt;Python code:&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;cyaio_demo.pyx&lt;/p&gt;
-&lt;p&gt;cdef void c_worker(int worker_idx, int iterations):
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;cdef void c_worker(int worker_idx, int iterations):
     cdef int i, result, o = iterations * worker_idx
     for i in range(o):
-        result += i&lt;strong&gt;i
+        result += i**i
     for i in range(o):
-        result -= i&lt;/strong&gt;i&lt;/p&gt;
-&lt;p&gt;async def worker(int worker_idx, int iterations):
-    c_worker(worker_idx, iterations)&lt;/p&gt;
+        result -= i**i
+
+async def worker(int worker_idx, int iterations):
+    c_worker(worker_idx, iterations)
+&lt;/pre&gt;
+
+
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;pyaio_demo.py&lt;/p&gt;
-&lt;p&gt;async def worker(worker_idx, iterations):
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;async def worker(worker_idx, iterations):
     result, o = 0, iterations * worker_idx
     for i in range(o):
-        result += i&lt;strong&gt;i
+        result += i**i
     for i in range(o):
-        result -= i&lt;/strong&gt;i&lt;/p&gt;
+        result -= i**i
+&lt;/pre&gt;
+
+
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;run.py&lt;/p&gt;
-&lt;p&gt;import cyaio_demo
-import pyaio_demo
-import sys
-import asyncio
-from datetime import datetime&lt;/p&gt;
-&lt;p&gt;WORKERS = 10
-ITERATIONS = 600&lt;/p&gt;
-&lt;p&gt;async def runner(f):
-    start_time = datetime.now()
-    await asyncio.wait([f(i, ITERATIONS) for i in range(WORKERS)])
-    return (datetime.now() - start_time).total_seconds()&lt;/p&gt;
-&lt;p&gt;async def benchmark():
-    cython = await runner(cyaio_demo.worker)
-    print('Cython: %.5Fs' % cython)
-    python = await runner(pyaio_demo.worker)
-    print('CPython: %.5Fs' % python)
-    print('Cython is %dX faster than CPython' % round(python / cython))&lt;/p&gt;
-&lt;p&gt;def main():
-    loop = asyncio.get_event_loop()
-    ret = loop.run_until_complete(benchmark())
-    loop.close()
-    return ret&lt;/p&gt;
-&lt;p&gt;if &lt;strong&gt;name&lt;/strong&gt; == '&lt;strong&gt;main&lt;/strong&gt;':
-    sys.exit(main())&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;cyaio_demo&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pyaio_demo&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;sys&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;asyncio&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;datetime&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;datetime&lt;/span&gt;
+
+&lt;span class="n"&gt;WORKERS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
+&lt;span class="n"&gt;ITERATIONS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;600&lt;/span&gt;
+
+&lt;span class="n"&gt;async&lt;/span&gt; &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;runner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;start_time&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;now&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;await&lt;/span&gt; &lt;span class="n"&gt;asyncio&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;wait&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ITERATIONS&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;WORKERS&lt;/span&gt;&lt;span class="p"&gt;)])&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;now&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;start_time&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;total_seconds&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="n"&gt;async&lt;/span&gt; &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;benchmark&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="n"&gt;cython&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;await&lt;/span&gt; &lt;span class="n"&gt;runner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cyaio_demo&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;worker&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Cython: &lt;/span&gt;&lt;span class="si"&gt;%.5F&lt;/span&gt;&lt;span class="s1"&gt;s'&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;cython&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;await&lt;/span&gt; &lt;span class="n"&gt;runner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pyaio_demo&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;worker&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'CPython: &lt;/span&gt;&lt;span class="si"&gt;%.5F&lt;/span&gt;&lt;span class="s1"&gt;s'&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;python&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Cython is &lt;/span&gt;&lt;span class="si"&gt;%d&lt;/span&gt;&lt;span class="s1"&gt;X faster than CPython'&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="nb"&gt;round&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;cython&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="n"&gt;loop&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;asyncio&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_event_loop&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;ret&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;loop&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run_until_complete&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;benchmark&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+    &lt;span class="n"&gt;loop&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;ret&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'__main__'&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;exit&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;/pre&gt;
+
+
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;setup.py&lt;/p&gt;
-&lt;p&gt;from distutils.core import setup
-from Cython.Build import cythonize&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;author&lt;/strong&gt; = 'vahid'&lt;/p&gt;
-&lt;p&gt;setup(
-    name='cyaio',
-    ext_modules=cythonize("cyaio_demo.pyx"),
-)&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;distutils.core&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;setup&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;Cython.Build&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;cythonize&lt;/span&gt;
+
+&lt;span class="n"&gt;__author__&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'vahid'&lt;/span&gt;
+
+&lt;span class="n"&gt;setup&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'cyaio'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;ext_modules&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;cythonize&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"cyaio_demo.pyx"&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+
+
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4&gt;The Result&lt;/h4&gt;
+&lt;h3&gt;The Result&lt;/h3&gt;
 &lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Cython&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;   &lt;span class="mf"&gt;0.01392&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;
 &lt;span class="n"&gt;GoLang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;   &lt;span class="mf"&gt;5.33766&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;
 &lt;span class="n"&gt;CPython&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;13.39106&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;
