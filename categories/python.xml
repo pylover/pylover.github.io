@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>Monty Python &amp; Famous Historian (python)</title><link>http://pylover.dobisel.com/</link><description></description><atom:link type="application/rss+xml" href="http://pylover.dobisel.com/categories/python.xml" rel="self"></atom:link><language>en</language><lastBuildDate>Sat, 21 May 2016 21:24:02 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Go &amp; Python performance test</title><link>http://pylover.dobisel.com/posts/go-python-performance-test/</link><dc:creator>Vahid Mardani</dc:creator><description>&lt;div&gt;&lt;p&gt;Consider this pseudo code:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;async def worker(worker_idx, iterations):
+    result, o = 0, iterations * worker_idx
+    for i in range(o):
+        result += i**i
+    for i in range(o):
+        result -= i**i
+
+await wait([worker(i, 600) for i in range(10)])
+&lt;/pre&gt;&lt;/div&gt;</description><category>benchmark</category><category>cython</category><category>go</category><category>go-lang</category><category>python</category><guid>http://pylover.dobisel.com/posts/go-python-performance-test/</guid><pubDate>Sat, 21 May 2016 21:13:09 GMT</pubDate></item></channel></rss>

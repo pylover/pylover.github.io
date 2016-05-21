@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>http://pylover.dobisel.com/</loc>
-  <lastmod>2016-05-21T21:17:00Z</lastmod>
+  <lastmod>2016-05-21T21:21:00Z</lastmod>
  </url>
  <url>
   <loc>http://pylover.dobisel.com/2016/</loc>
@@ -19,15 +19,35 @@
  </url>
  <url>
   <loc>http://pylover.dobisel.com/categories/</loc>
-  <lastmod>2016-05-21T21:17:00Z</lastmod>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
  </url>
  <url>
   <loc>http://pylover.dobisel.com/categories/benchmark-go-golang-python-cython/</loc>
   <lastmod>2016-05-21T21:17:00Z</lastmod>
  </url>
  <url>
+  <loc>http://pylover.dobisel.com/categories/benchmark/</loc>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
+ </url>
+ <url>
   <loc>http://pylover.dobisel.com/categories/cat_programming/</loc>
   <lastmod>2016-05-21T21:17:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://pylover.dobisel.com/categories/cython/</loc>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://pylover.dobisel.com/categories/go-lang/</loc>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://pylover.dobisel.com/categories/go/</loc>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://pylover.dobisel.com/categories/python/</loc>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
  </url>
  <url>
   <loc>http://pylover.dobisel.com/galleries/</loc>

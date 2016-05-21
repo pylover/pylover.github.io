@@ -10,8 +10,28 @@
   <lastmod>2016-05-21T21:17:00Z</lastmod>
  </sitemap>
  <sitemap>
+  <loc>http://pylover.dobisel.com/categories/benchmark.xml</loc>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>http://pylover.dobisel.com/categories/cat_programming.xml</loc>
-  <lastmod>2016-05-21T21:17:00Z</lastmod>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://pylover.dobisel.com/categories/cython.xml</loc>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://pylover.dobisel.com/categories/go-lang.xml</loc>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://pylover.dobisel.com/categories/go.xml</loc>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://pylover.dobisel.com/categories/python.xml</loc>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://pylover.dobisel.com/galleries/rss.xml</loc>
@@ -19,10 +39,10 @@
  </sitemap>
  <sitemap>
   <loc>http://pylover.dobisel.com/rss.xml</loc>
-  <lastmod>2016-05-21T21:17:00Z</lastmod>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://pylover.dobisel.com/sitemap.xml</loc>
-  <lastmod>2016-05-21T21:17:00Z</lastmod>
+  <lastmod>2016-05-21T21:24:00Z</lastmod>
  </sitemap>
 </sitemapindex>

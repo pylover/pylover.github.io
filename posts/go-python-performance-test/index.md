@@ -2,7 +2,7 @@
 .. title: Go & Python performance test
 .. slug: go-python-performance-test
 .. date: 2016-05-22 01:43:09 UTC+04:30
-.. tags: benchmark go golang python cython
+.. tags: benchmark,go,go-lang,python,cython
 .. category: programming
 .. link: 
 .. description: A simple arithmetic test in CPython, Cython & golang
