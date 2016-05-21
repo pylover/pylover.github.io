@@ -1,0 +1,21 @@
+#! /bin/bash
+
+COMMIT_MSG = "Adding new post or page"
+
+nikola build
+git checkout nikola
+git add .
+git commit -am $COMMIT_MSG
+git checkout master
+git pull
+git checkout nikola
+git push origin nikola
+
+cd output
+git add .
+git commit -am $COMMIT_MSG
+git push origin master
+cd ..
+echo "Open http:/pylover.dobisel.com to see the result"
+
+
