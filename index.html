@@ -10,7 +10,7 @@
 <meta content="#5670d4" name="theme-color">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
 <link rel="canonical" href="http://pylover.dobisel.com/">
-<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/go-python-performance-test/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -60,6 +60,33 @@
 
     
 <div class="postindex">
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/go-python-performance-test/" class="u-url">Go &amp; Python performance test</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">
+                Vahid Mardani
+            </span></p>
+            <p class="dateline"><a href="posts/go-python-performance-test/" rel="bookmark"><time class="published dt-published" datetime="2016-05-22T01:43:09+04:30" title="2016-05-22 01:43">2016-05-22 01:43</time></a></p>
+                <p class="commentline">
+        
+</p>
+<div class="g-commentcount" data-href="/posts/go-python-performance-test/"></div>
+<script src="https://apis.google.com/js/plusone.js"></script>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Consider this pseudo code:</p>
+<pre class="code literal-block"><span></span>async def worker(worker_idx, iterations):
+    result, o = 0, iterations * worker_idx
+    for i in range(o):
+        result += i**i
+    for i in range(o):
+        result -= i**i
+
+await wait([worker(i, 600) for i in range(10)])
+</pre>
+</div>
+    </div>
+    </article>
 </div>
 
 
