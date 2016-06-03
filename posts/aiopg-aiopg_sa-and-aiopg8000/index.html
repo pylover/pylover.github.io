@@ -110,8 +110,11 @@
 
 
 <h3>Code</h3>
-<p>To run the code, install dependencies first:</p>
-<pre class="code literal-block"><span></span>$ pip install aiopg aiopg8000 sqlalchemy
+<p>To run the code, create databases and install dependencies first:</p>
+<pre class="code literal-block"><span></span>$ sudo -u postgres createdb aiopg8000
+$ sudo -u postgres createdb aiopg
+$ sudo -u postgres createdb aiopg_sa
+$ pip install aiopg aiopg8000 sqlalchemy
 </pre>
 
 

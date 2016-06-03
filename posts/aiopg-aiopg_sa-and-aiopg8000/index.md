@@ -29,8 +29,11 @@ Last result with 90 workers and inserting 50 rows per worker:
 Code
 ----
 
-To run the code, install dependencies first:
+To run the code, create databases and install dependencies first:
 
+    $ sudo -u postgres createdb aiopg8000
+    $ sudo -u postgres createdb aiopg
+    $ sudo -u postgres createdb aiopg_sa
     $ pip install aiopg aiopg8000 sqlalchemy
     
 
