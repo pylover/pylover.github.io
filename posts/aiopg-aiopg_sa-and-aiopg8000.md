@@ -18,12 +18,13 @@ So, benchmarking these packages is the first step before using one of them.
 
 Last result with 90 workers and inserting 50 rows per worker:
 
-        [aiopg.sa]	Total time: 12.46s
-        [aiopg]	    Total time: 5.57s
-        [aiopg8000]	Total time: 40.83s
-        [aiopg]     is 2.24x faster than [aiopg.sa]
-        [aiopg]     is 7.33x faster than [aiopg8000]
-        [aiopg.sa]  is 3.28x faster than [aiopg8000]
+
+    [aiopg.sa]	Total time: 16.52s
+    [aiopg]	Total time: 6.08s
+    [aiopg8000]	Total time: 62.20s
+    [aiopg] is 2.72x faster than [aiopg.sa]
+    [aiopg] is 10.22x faster than [aiopg8000]
+    [aiopg.sa] is 3.76x faster than [aiopg8000]
 
 
 Code
@@ -34,7 +35,7 @@ To run the code, create databases and install dependencies first:
     $ sudo -u postgres createdb aiopg8000
     $ sudo -u postgres createdb aiopg
     $ sudo -u postgres createdb aiopg_sa
-    $ pip install aiopg aiopg8000 sqlalchemy
+    $ pip-3.5 install aiopg aiopg8000 sqlalchemy
     
 
 Here is the code:
@@ -92,8 +93,15 @@ Here is the code:
         db = await aiopg8000_create_connection()
         c = await db.cursor()
         for i in range(ROWS_PER_WORKER):
+            q = await c.mogrify(
+                    'INSERT INTO t1(age, name) VALUES(%(age)s, %(name)s) RETURNING id, age, name',
+                    dict(
+                        age=i,
+                        name=name
+                    )
+                )
             await c.execute(
-                'INSERT INTO t1(age, name) VALUES(%s, %s ) RETURNING id, age, name', (i, name)
+                q
             )
             results = await c.fetchall()
             for row in results:
@@ -113,6 +121,7 @@ Here is the code:
     
     aiopg_dsn = 'dbname=aiopg user=postgres password=postgres host=127.0.0.1'
     aiopg_pool = None
+    
     
     async def aiopg_setup_db():
         global aiopg_pool
@@ -154,6 +163,7 @@ Here is the code:
         sa.Column('name', sa.String(50))
     )
     aiopg_sa_engine = None
+    
     
     async def aiopg_sa_setup_db():
         global aiopg_sa_engine
@@ -219,9 +229,9 @@ Here is the code:
     
     
     async def main():
+        aiopg8000_delta = await run_benchmark('aiopg8000')
         aiopg_sa_delta = await run_benchmark('aiopg_sa')
         aiopg_delta = await run_benchmark('aiopg')
-        aiopg8000_delta = await run_benchmark('aiopg8000')
         print('[aiopg.sa]\tTotal time: %.2Fs' % aiopg_sa_delta)
         print('[aiopg]\tTotal time: %.2Fs' % aiopg_delta)
         print('[aiopg8000]\tTotal time: %.2Fs' % aiopg8000_delta)
@@ -234,4 +244,3 @@ Here is the code:
     if __name__ == '__main__':
         loop = asyncio.get_event_loop()
         loop.run_until_complete(main())
-
