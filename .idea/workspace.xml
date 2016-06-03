@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e6c615e1-7bc5-4f68-9297-3dc13b04a80d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/posts/aiopg-aiopg_sa-and-aiopg8000.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/vahid.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/posts/aiopg-aiopg_sa-and-aiopg8000.md" afterPath="$PROJECT_DIR$/posts/aiopg-aiopg_sa-and-aiopg8000.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/upload" afterPath="$PROJECT_DIR$/upload" />
     </list>
     <ignored path="pylover.github.io.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,12 +27,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="aiopg-aiopg_sa-and-aiopg8000.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="aiopg-aiopg_sa-and-aiopg8000.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/posts/aiopg-aiopg_sa-and-aiopg8000.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="-3111">
-                <caret line="36" column="4" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="4" />
+              <first_editor relative-caret-position="435">
+                <caret line="236" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="236" selection-end-column="0" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -38,16 +40,6 @@
           </provider>
           <provider editor-type-id="MarkdownFxPreviewEditor">
             <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="upload" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/upload">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
           </provider>
         </entry>
       </file>
@@ -76,6 +68,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/posts/go-python-performance-test.md" />
+        <option value="$PROJECT_DIR$/upload" />
         <option value="$PROJECT_DIR$/posts/aiopg-aiopg_sa-and-aiopg8000.md" />
       </list>
     </option>
@@ -99,7 +92,7 @@
     <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="2" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
@@ -435,11 +428,19 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/upload">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/posts/aiopg-aiopg_sa-and-aiopg8000.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="-3111">
-            <caret line="36" column="4" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="4" />
+          <first_editor relative-caret-position="435">
+            <caret line="236" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="236" selection-end-column="0" />
             <folding />
           </first_editor>
           <second_editor />
@@ -447,14 +448,6 @@
       </provider>
       <provider editor-type-id="MarkdownFxPreviewEditor">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/upload">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
       </provider>
     </entry>
   </component>
