@@ -100,12 +100,12 @@
 <p>There are two available async adaptors for postgreSQL in python: aiopg, aiopg.sa &amp; aiopg8000</p>
 <p>So, benchmarking these packages is the first step before using one of them.</p>
 <p>Last result with 90 workers and inserting 50 rows per worker:</p>
-<pre class="code literal-block"><span></span>    [aiopg.sa]  Total time: 12.46s
-    [aiopg]     Total time: 5.57s
-    [aiopg8000] Total time: 40.83s
-    [aiopg]     is 2.24x faster than [aiopg.sa]
-    [aiopg]     is 7.33x faster than [aiopg8000]
-    [aiopg.sa]  is 3.28x faster than [aiopg8000]
+<pre class="code literal-block"><span></span>[aiopg.sa]  Total time: 16.52s
+[aiopg] Total time: 6.08s
+[aiopg8000] Total time: 62.20s
+[aiopg] is 2.72x faster than [aiopg.sa]
+[aiopg] is 10.22x faster than [aiopg8000]
+[aiopg.sa] is 3.76x faster than [aiopg8000]
 </pre>
 
 
@@ -114,7 +114,7 @@
 <pre class="code literal-block"><span></span>$ sudo -u postgres createdb aiopg8000
 $ sudo -u postgres createdb aiopg
 $ sudo -u postgres createdb aiopg_sa
-$ pip install aiopg aiopg8000 sqlalchemy
+$ pip-3.5 install aiopg aiopg8000 sqlalchemy
 </pre>
 
 
@@ -172,8 +172,15 @@ $ pip install aiopg aiopg8000 sqlalchemy
     <span class="n">db</span> <span class="o">=</span> <span class="n">await</span> <span class="n">aiopg8000_create_connection</span><span class="p">()</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">await</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ROWS_PER_WORKER</span><span class="p">):</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">await</span> <span class="n">c</span><span class="o">.</span><span class="n">mogrify</span><span class="p">(</span>
+                <span class="s1">'INSERT INTO t1(age, name) VALUES(</span><span class="si">%(age)s</span><span class="s1">, </span><span class="si">%(name)s</span><span class="s1">) RETURNING id, age, name'</span><span class="p">,</span>
+                <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">age</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">name</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
         <span class="n">await</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="s1">'INSERT INTO t1(age, name) VALUES(</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1"> ) RETURNING id, age, name'</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">q</span>
         <span class="p">)</span>
         <span class="n">results</span> <span class="o">=</span> <span class="n">await</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
@@ -193,6 +200,7 @@ $ pip install aiopg aiopg8000 sqlalchemy
 
 <span class="n">aiopg_dsn</span> <span class="o">=</span> <span class="s1">'dbname=aiopg user=postgres password=postgres host=127.0.0.1'</span>
 <span class="n">aiopg_pool</span> <span class="o">=</span> <span class="bp">None</span>
+
 
 <span class="n">async</span> <span class="k">def</span> <span class="nf">aiopg_setup_db</span><span class="p">():</span>
     <span class="k">global</span> <span class="n">aiopg_pool</span>
@@ -234,6 +242,7 @@ $ pip install aiopg aiopg8000 sqlalchemy
     <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">'name'</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
 <span class="p">)</span>
 <span class="n">aiopg_sa_engine</span> <span class="o">=</span> <span class="bp">None</span>
+
 
 <span class="n">async</span> <span class="k">def</span> <span class="nf">aiopg_sa_setup_db</span><span class="p">():</span>
     <span class="k">global</span> <span class="n">aiopg_sa_engine</span>
@@ -299,9 +308,9 @@ $ pip install aiopg aiopg8000 sqlalchemy
 
 
 <span class="n">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">aiopg8000_delta</span> <span class="o">=</span> <span class="n">await</span> <span class="n">run_benchmark</span><span class="p">(</span><span class="s1">'aiopg8000'</span><span class="p">)</span>
     <span class="n">aiopg_sa_delta</span> <span class="o">=</span> <span class="n">await</span> <span class="n">run_benchmark</span><span class="p">(</span><span class="s1">'aiopg_sa'</span><span class="p">)</span>
     <span class="n">aiopg_delta</span> <span class="o">=</span> <span class="n">await</span> <span class="n">run_benchmark</span><span class="p">(</span><span class="s1">'aiopg'</span><span class="p">)</span>
-    <span class="n">aiopg8000_delta</span> <span class="o">=</span> <span class="n">await</span> <span class="n">run_benchmark</span><span class="p">(</span><span class="s1">'aiopg8000'</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="s1">'[aiopg.sa]</span><span class="se">\t</span><span class="s1">Total time: </span><span class="si">%.2F</span><span class="s1">s'</span> <span class="o">%</span> <span class="n">aiopg_sa_delta</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="s1">'[aiopg]</span><span class="se">\t</span><span class="s1">Total time: </span><span class="si">%.2F</span><span class="s1">s'</span> <span class="o">%</span> <span class="n">aiopg_delta</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="s1">'[aiopg8000]</span><span class="se">\t</span><span class="s1">Total time: </span><span class="si">%.2F</span><span class="s1">s'</span> <span class="o">%</span> <span class="n">aiopg8000_delta</span><span class="p">)</span>
