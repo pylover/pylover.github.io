@@ -14,7 +14,7 @@ Why?:
 -----
 There are two available async adaptors for postgreSQL in python: aiopg, aiopg.sa & aiopg8000
 
-So, benchmarking these packages is the first step before using one of those.
+So, benchmarking these packages is the first step before using one of them.
 
 Last result with 90 workers and inserting 50 rows per worker:
 
