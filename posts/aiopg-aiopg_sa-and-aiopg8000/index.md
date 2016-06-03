@@ -1,5 +1,5 @@
 <!-- 
-.. title: aiopg, aiopg_sa and aiopg8000
+.. title: aiopg, aiopg.sa and aiopg8000
 .. slug: aiopg-aiopg_sa-and-aiopg8000
 .. date: 2016-06-04 03:05:46 UTC+04:30
 .. tags: aiopg,aiopg.sa,aiopg8000,asyncio,python,postgresql
