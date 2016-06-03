@@ -15,11 +15,27 @@
  </url>
  <url>
   <loc>http://pylover.dobisel.com/archive.html</loc>
-  <lastmod>2016-05-21T21:17:00Z</lastmod>
+  <lastmod>2016-06-03T22:43:00Z</lastmod>
  </url>
  <url>
   <loc>http://pylover.dobisel.com/categories/</loc>
-  <lastmod>2016-05-21T21:24:00Z</lastmod>
+  <lastmod>2016-06-03T22:43:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://pylover.dobisel.com/categories/aiopg/</loc>
+  <lastmod>2016-06-03T22:43:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://pylover.dobisel.com/categories/aiopg8000/</loc>
+  <lastmod>2016-06-03T22:43:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://pylover.dobisel.com/categories/aiopgsa/</loc>
+  <lastmod>2016-06-03T22:43:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://pylover.dobisel.com/categories/asyncio/</loc>
+  <lastmod>2016-06-03T22:43:00Z</lastmod>
  </url>
  <url>
   <loc>http://pylover.dobisel.com/categories/benchmark-go-golang-python-cython/</loc>
@@ -46,6 +62,10 @@
   <lastmod>2016-05-21T21:24:00Z</lastmod>
  </url>
  <url>
+  <loc>http://pylover.dobisel.com/categories/postgresql/</loc>
+  <lastmod>2016-06-03T22:43:00Z</lastmod>
+ </url>
+ <url>
   <loc>http://pylover.dobisel.com/categories/python/</loc>
   <lastmod>2016-05-21T21:24:00Z</lastmod>
  </url>
@@ -56,6 +76,10 @@
  <url>
   <loc>http://pylover.dobisel.com/listings/</loc>
   <lastmod>2016-05-21T20:30:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://pylover.dobisel.com/posts/aiopg-aiopg_sa-and-aiopg8000/</loc>
+  <lastmod>2016-06-03T22:43:00Z</lastmod>
  </url>
  <url>
   <loc>http://pylover.dobisel.com/posts/go-python-performance-test/</loc>
