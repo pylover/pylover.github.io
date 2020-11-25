@@ -1,4 +1,0 @@
-Sitemap: http://pylover.dobisel.com/sitemapindex.xml
-
-User-Agent: *
-Host: pylover.dobisel.com
